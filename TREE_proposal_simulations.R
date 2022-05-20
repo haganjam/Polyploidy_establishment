@@ -1,0 +1,156 @@
+
+# Project: Polyploidy establishment and reproductive traits
+
+# Title: Run simulations for TREE proposal
+
+# load relevant libraries
+library(here)
+library(dplyr)
+library(ggplot2)
+
+# load the relevant functions
+source(here("Agent_based_polyploid_establishment_model.R"))
+source(here("Function_plotting_theme.R"))
+
+# set the number of simulation replicates
+nreps <- 50
+
+# sites and number of time-steps are fixed
+sites <- 100
+ts <- 500
+death_prop <- 0.10
+
+# frequency of the majority cytotype
+X_pol <- c(0.05, 0.95)
+P_D <- c(0.9)
+pol_eff <- c(0.80)
+self <- c(0.2, 0.9)
+seedP <- c(5)
+seedD <- c(10)
+
+# create a parameter set
+df <- expand.grid(nreps = 1:nreps, 
+                  sites = sites, ts = ts, death_prop = death_prop, pol_eff = pol_eff,
+                  X_pol = X_pol, P_D = P_D, self = self, seedP = seedP, seedD = seedD
+)
+df$modid <- as.character(1:nrow(df))
+dim(df)
+View(df)
+
+# set-up an output list
+modlist <- vector("list", length = nrow(df))
+
+pb <- txtProgressBar(min = 0, max = nrow(df), initial = 0)
+for(i in 1:nrow(df)) {
+  
+  # update the progress bar
+  setTxtProgressBar(pb,i)
+  
+  x <- Minority_cyto_model(ts = df$ts[i], sites = df$sites[i], P_D = df$P_D[i], X_pol = df$X_pol[i],
+                           pol_eff = df$pol_eff[i], self = df$self[i], 
+                           seedP = df$seedP[i], seedD = df$seedD[i], 
+                           fit_ran = TRUE, fit_ran.m = 0.5, fit_ran.sd = 2.5,
+                           death_prop = df$death_prop[i],
+                           plot = FALSE)
+  
+  modlist[[i]] <- x
+  
+}
+# close the progress bar
+close(pb)
+
+# bind the rows of the model output
+modlist <- dplyr::bind_rows(modlist, .id = "modid")
+
+# bind the model output to the parameters
+modlist <- dplyr::full_join(df, modlist, by = "modid")
+
+# check the data
+summary(modlist)
+
+# make a minority cytotype advantage variable
+modlist <- 
+  modlist %>%
+  mutate(MC_ad = if_else(near(seedD, seedP), 0, 1),
+         self = as.character(self))
+
+# take the average per time
+modlist.sum <- 
+  modlist %>%
+  group_by(self, X_pol, time) %>%
+  summarise(prop_P.m = mean(prop_P), .groups = "drop")
+
+# visualise the results
+names(modlist)
+
+# low selfing rate
+p1 <- 
+  ggplot() +
+  geom_line(data = modlist %>% 
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == "0.2"), 
+            mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
+            size = 0.1, alpha = 0.2) +
+  geom_line(data = modlist.sum %>%
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == "0.2"),
+            mapping = aes(x = time, y = prop_P.m, colour = X_pol),
+            size = 1, alpha = 1) +
+  geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
+  scale_y_continuous(limits = c(0, 1)) +
+  ylab("Minority cytotype freq.") +
+  xlab("Generations") +
+  ggtitle("Selfing rate = 0.2") +
+  guides(colour = guide_legend(title = "Outcrossing rate",
+                               override.aes = list(size = 1.25,
+                                                   alpha = 1))) +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_meta() +
+  theme(axis.text = element_text(colour = "black"),
+        legend.position = "bottom",
+        legend.key = element_rect(fill = NA, color = NA))
+p1
+
+# high selfing rate
+p2 <- 
+  ggplot() +
+  geom_line(data = modlist %>% 
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == "0.9"), 
+            mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
+            size = 0.1, alpha = 0.2) +
+  geom_line(data = modlist.sum %>%
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == "0.9"),
+            mapping = aes(x = time, y = prop_P.m, colour = X_pol),
+            size = 1, alpha = 1) +
+  geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
+  scale_y_continuous(limits = c(0, 1)) +
+  ylab("Minority cytotype freq.") +
+  xlab("Generations") +
+  ggtitle("Selfing rate = 0.9") +
+  guides(colour = guide_legend(title = "Outcrossing rate",
+                               override.aes = list(size = 1.25,
+                                                   alpha = 1))) +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_meta() +
+  theme(axis.text = element_text(colour = "black"),
+        legend.position = "bottom",
+        legend.key = element_rect(fill = NA, color = NA))
+p2
+
+# check that we have a figures folder
+if(! dir.exists(here("Figures"))){
+  dir.create(here("Figures"))
+}
+
+# export these figures
+ggsave(filename = here("Figures/fig_1a.png"), 
+       plot = p1, width = 12, height = 11, dpi = 300,
+       units = "cm")
+
+ggsave(filename = here("Figures/fig_1b.png"), 
+       plot = p2, width = 12, height = 11, dpi = 300,
+       units = "cm")
+
+### END
