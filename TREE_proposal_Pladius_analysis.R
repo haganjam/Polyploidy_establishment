@@ -66,16 +66,24 @@ pdat2 <-
 
 
 # plot ploidy class and reproductive mode
+
+# collapse the 6 and 7 ploidy levels with the 5 level
+pdat2$Ploidy_class1 <- ifelse(pdat2$Ploidy_class1 %in% c(5, 6, 7), 5, pdat2$Ploidy_class1)
+
+# re-level the factors
+pdat2$Ploidy_class_fac <- factor(pdat2$Ploidy_class1)
+levels(pdat2$Ploidy_class_fac) <- paste(1:5, "x", sep = "")
+
 p1 <- 
   pdat2 %>%
-  group_by(reproductive_mode, Ploidy_class1) %>%
-  summarise(count = n()) %>%
+  group_by(reproductive_mode, Ploidy_class1, Ploidy_class_fac) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(reproductive_mode) %>%
   mutate(count_prop = sum(count)) %>%
   ungroup() %>%
-  mutate(proportion = count/count_prop,
-         Ploidy_class1 = as.character(Ploidy_class1)) %>%
+  mutate(proportion = count/count_prop) %>%
   ggplot(data = .,
-       mapping = aes(x = Ploidy_class1, y = proportion, fill = reproductive_mode)) +
+       mapping = aes(x = Ploidy_class_fac, y = proportion, fill = reproductive_mode)) +
   geom_col(width=0.5,    
            position=position_dodge(0.5), alpha = 0.75) +
   #geom_vline(xintercept = 1, colour = "black", linetype = "dashed") +
