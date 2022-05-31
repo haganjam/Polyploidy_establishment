@@ -1,6 +1,7 @@
 ---
 title: "Polyploidy establishment: Project documentation"
-output: html_notebook
+output:
+html_notebook: default
 ---
 
 # Project goals
