@@ -41,6 +41,12 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
                                 fit_ran.sd = 2.5, death_prop = 0.10,
                                 plot = TRUE) {
   
+  # if fit_ran is true then we add a random deviation
+  if(fit_ran) {
+    seedPx <- round(seedD + rnorm(n = 1, mean = fit_ran.m, sd = fit_ran.sd), 0)
+    seedPx <- ifelse(seedPx < 1, 1, seedPx)
+  } else {seedPx <- seedP}
+  
   # set the output list
   output <- vector("list", length = ts)
   
@@ -66,12 +72,6 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
         sample(m[-x], size = 1, replace = FALSE)
         
       })
-    
-    # if fit_ran is true then we add a random deviation
-    if(fit_ran) {
-      seedPx <- round(seedD + rnorm(n = 1, mean = fit_ran.m, sd = fit_ran.sd), 0)
-      seedPx <- ifelse(seedPx < 1, 1, seedPx)
-    } else {seedPx <- seedP}
     
     # get the seed pool for the next time-step from outcrossing
     oc_tn <- 

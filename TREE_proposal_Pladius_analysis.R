@@ -74,31 +74,29 @@ pdat2$Ploidy_class1 <- ifelse(pdat2$Ploidy_class1 %in% c(5, 6, 7), 5, pdat2$Ploi
 pdat2$Ploidy_class_fac <- factor(pdat2$Ploidy_class1)
 levels(pdat2$Ploidy_class_fac) <- paste(1:5, "x", sep = "")
 
-p1 <- 
+pdat2 <- 
   pdat2 %>%
-  group_by(reproductive_mode, Ploidy_class1, Ploidy_class_fac) %>%
-  summarise(count = n(), .groups = "drop") %>%
   group_by(reproductive_mode) %>%
-  mutate(count_prop = sum(count)) %>%
-  ungroup() %>%
-  mutate(proportion = count/count_prop) %>%
-  ggplot(data = .,
-       mapping = aes(x = Ploidy_class_fac, y = proportion, fill = reproductive_mode)) +
-  geom_col(width=0.5,    
-           position=position_dodge(0.5), alpha = 0.75) +
-  #geom_vline(xintercept = 1, colour = "black", linetype = "dashed") +
-  geom_vline(xintercept = mean(pdat2[pdat2$reproductive_mode == "dioecious",]$Ploidy_class1), 
-             colour = viridis(n = 1, begin = 0, end = 0)) +
-  geom_vline(xintercept = mean(pdat2[pdat2$reproductive_mode == "monoecious",]$Ploidy_class1), 
-             colour = viridis(n = 1, begin = 0.45, end = 0.45)) +
-  geom_vline(xintercept = mean(pdat2[pdat2$reproductive_mode == "synoecious",]$Ploidy_class1), 
-             colour = viridis(n = 1, begin = 0.9, end = 0.9)) +
-  scale_fill_viridis_d(end = 0.9, option = "D") +
-  xlab("Ploidy level") +
-  ylab("Proportion of species") +
-  theme_meta() +
-  theme(legend.position = "bottom", 
-        legend.title = element_blank())
+  summarise(proportion = sum(Polyploidy_yes_no)/n(),
+            n = n(), 
+            .groups = "drop")
+
+p1 <- 
+  ggplot(data = pdat2,
+         mapping = aes(x = reproductive_mode, y = proportion)) +
+  geom_col(width = 0.2, colour = viridis(n = 1, begin = 0.5, end = 0.5),
+           fill = viridis(n = 1, begin = 0.5, end = 0.5)) +
+  scale_y_continuous(limits = c(0, 0.55), breaks = c(0.1, 0.2, 0.3, 0.4, 0.5)) +
+  annotate(geom = "text", label = paste("N = ", pdat2$n[1], sep = "" ),
+           x = 1, y = 0.35) + 
+  annotate(geom = "text", label = paste("N = ", pdat2$n[2], sep = "" ),
+           x = 2, y = 0.21) +
+  annotate(geom = "text", label = paste("N = ", pdat2$n[3], sep = "" ),
+           x = 3, y = 0.52) + 
+  xlab("Reproductive mode") +
+  ylab("Polyploid species prop.") +
+  theme_meta()
+  
 p1
 
 ggsave(filename = here("Figures/fig_1c.png"), 

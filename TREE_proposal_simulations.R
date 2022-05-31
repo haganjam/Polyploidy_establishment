@@ -13,7 +13,7 @@ source(here("Agent_based_polyploid_establishment_model.R"))
 source(here("Function_plotting_theme.R"))
 
 # set the number of simulation replicates
-nreps <- 50
+nreps <- 100
 
 # sites and number of time-steps are fixed
 sites <- 100
@@ -21,10 +21,10 @@ ts <- 500
 death_prop <- 0.10
 
 # frequency of the majority cytotype
-X_pol <- c(0.05, 0.95)
+X_pol <- c(0.10, 0.90)
 P_D <- c(0.9)
 pol_eff <- c(0.80)
-self <- c(0.2, 0.9)
+self <- c(0.7)
 seedP <- c(5)
 seedD <- c(10)
 
@@ -35,7 +35,7 @@ df <- expand.grid(nreps = 1:nreps,
 )
 df$modid <- as.character(1:nrow(df))
 dim(df)
-View(df)
+head(df)
 
 # set-up an output list
 modlist <- vector("list", length = nrow(df))
@@ -49,7 +49,7 @@ for(i in 1:nrow(df)) {
   x <- Minority_cyto_model(ts = df$ts[i], sites = df$sites[i], P_D = df$P_D[i], X_pol = df$X_pol[i],
                            pol_eff = df$pol_eff[i], self = df$self[i], 
                            seedP = df$seedP[i], seedD = df$seedD[i], 
-                           fit_ran = TRUE, fit_ran.m = 0.5, fit_ran.sd = 2.5,
+                           fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
                            death_prop = df$death_prop[i],
                            plot = FALSE)
   
@@ -83,61 +83,33 @@ modlist.sum <-
 # visualise the results
 names(modlist)
 
-# low selfing rate
+# high selfing rate
 p1 <- 
   ggplot() +
   geom_line(data = modlist %>% 
-              mutate(X_pol = as.character(X_pol)) %>%
-              filter(self == "0.2"), 
+              mutate(X_pol = as.character(X_pol)), 
             mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
             size = 0.1, alpha = 0.2) +
   geom_line(data = modlist.sum %>%
-              mutate(X_pol = as.character(X_pol)) %>%
-              filter(self == "0.2"),
+              mutate(X_pol = as.character(X_pol)),
             mapping = aes(x = time, y = prop_P.m, colour = X_pol),
             size = 1, alpha = 1) +
   geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
   scale_y_continuous(limits = c(0, 1)) +
   ylab("Minority cytotype freq.") +
   xlab("Generations") +
-  ggtitle("Selfing rate = 0.2") +
+  # ggtitle("Selfing rate = 0.8") +
   guides(colour = guide_legend(title = "Outcrossing rate",
-                               override.aes = list(size = 1.25,
+                               override.aes = list(size = 1.5,
                                                    alpha = 1))) +
   scale_colour_viridis_d(end = 0.9) +
   theme_meta() +
   theme(axis.text = element_text(colour = "black"),
         legend.position = "bottom",
-        legend.key = element_rect(fill = NA, color = NA))
+        legend.key = element_rect(fill = NA, color = NA),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11))
 p1
-
-# high selfing rate
-p2 <- 
-  ggplot() +
-  geom_line(data = modlist %>% 
-              mutate(X_pol = as.character(X_pol)) %>%
-              filter(self == "0.9"), 
-            mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
-            size = 0.1, alpha = 0.2) +
-  geom_line(data = modlist.sum %>%
-              mutate(X_pol = as.character(X_pol)) %>%
-              filter(self == "0.9"),
-            mapping = aes(x = time, y = prop_P.m, colour = X_pol),
-            size = 1, alpha = 1) +
-  geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
-  scale_y_continuous(limits = c(0, 1)) +
-  ylab("Minority cytotype freq.") +
-  xlab("Generations") +
-  ggtitle("Selfing rate = 0.9") +
-  guides(colour = guide_legend(title = "Outcrossing rate",
-                               override.aes = list(size = 1.25,
-                                                   alpha = 1))) +
-  scale_colour_viridis_d(end = 0.9) +
-  theme_meta() +
-  theme(axis.text = element_text(colour = "black"),
-        legend.position = "bottom",
-        legend.key = element_rect(fill = NA, color = NA))
-p2
 
 # check that we have a figures folder
 if(! dir.exists(here("Figures"))){
@@ -145,12 +117,8 @@ if(! dir.exists(here("Figures"))){
 }
 
 # export these figures
-ggsave(filename = here("Figures/fig_1a.png"), 
-       plot = p1, width = 12, height = 11, dpi = 300,
-       units = "cm")
-
 ggsave(filename = here("Figures/fig_1b.png"), 
-       plot = p2, width = 12, height = 11, dpi = 300,
+       plot = p1, width = 12, height = 11, dpi = 300,
        units = "cm")
 
 ### END
