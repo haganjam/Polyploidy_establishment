@@ -98,7 +98,7 @@ p1 <-
             size = 0.1, alpha = 0.2) +
   geom_line(data = modlist.sum %>%
               mutate(X_pol = as.character(X_pol)) %>%
-              filter(self == 0.8),
+              filter(self == 0.1),
             mapping = aes(x = time, y = prop_P.m, colour = X_pol),
             size = 1, alpha = 1) +
   geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
