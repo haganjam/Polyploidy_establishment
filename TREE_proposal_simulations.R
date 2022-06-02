@@ -22,9 +22,9 @@ death_prop <- 0.10
 
 # frequency of the majority cytotype
 X_pol <- c(0.10, 0.90)
-P_D <- c(0.9)
+P_D <- c(0.95)
 pol_eff <- c(0.80)
-self <- c(0.7)
+self <- c(0.10, 0.80)
 seedP <- c(5)
 seedD <- c(10)
 
@@ -83,22 +83,29 @@ modlist.sum <-
 # visualise the results
 names(modlist)
 
-# high selfing rate
+# check that we have a figures folder
+if(! dir.exists(here("Figures"))){
+  dir.create(here("Figures"))
+}
+
+# low selfing rate
 p1 <- 
   ggplot() +
   geom_line(data = modlist %>% 
-              mutate(X_pol = as.character(X_pol)), 
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == 0.1), 
             mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
             size = 0.1, alpha = 0.2) +
   geom_line(data = modlist.sum %>%
-              mutate(X_pol = as.character(X_pol)),
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == 0.8),
             mapping = aes(x = time, y = prop_P.m, colour = X_pol),
             size = 1, alpha = 1) +
   geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
   scale_y_continuous(limits = c(0, 1)) +
   ylab("Minority cytotype freq.") +
   xlab("Generations") +
-  # ggtitle("Selfing rate = 0.8") +
+  ggtitle("Selfing rate = 0.1") +
   guides(colour = guide_legend(title = "Outcrossing rate",
                                override.aes = list(size = 1.5,
                                                    alpha = 1))) +
@@ -111,14 +118,44 @@ p1 <-
         legend.text = element_text(size = 11))
 p1
 
-# check that we have a figures folder
-if(! dir.exists(here("Figures"))){
-  dir.create(here("Figures"))
-}
+# export these figures
+ggsave(filename = here("Figures/fig_1a.png"), 
+       plot = p1, width = 12, height = 11, dpi = 300,
+       units = "cm")
+
+# high selfing rate
+p2 <- 
+  ggplot() +
+  geom_line(data = modlist %>% 
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == 0.8), 
+            mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
+            size = 0.1, alpha = 0.2) +
+  geom_line(data = modlist.sum %>%
+              mutate(X_pol = as.character(X_pol)) %>%
+              filter(self == 0.8),
+            mapping = aes(x = time, y = prop_P.m, colour = X_pol),
+            size = 1, alpha = 1) +
+  geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
+  scale_y_continuous(limits = c(0, 1)) +
+  ylab("Minority cytotype freq.") +
+  xlab("Generations") +
+  ggtitle("Selfing rate = 0.8") +
+  guides(colour = guide_legend(title = "Outcrossing rate",
+                               override.aes = list(size = 1.5,
+                                                   alpha = 1))) +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_meta() +
+  theme(axis.text = element_text(colour = "black"),
+        legend.position = "bottom",
+        legend.key = element_rect(fill = NA, color = NA),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11))
+p2
 
 # export these figures
 ggsave(filename = here("Figures/fig_1b.png"), 
-       plot = p1, width = 12, height = 11, dpi = 300,
+       plot = p2, width = 12, height = 11, dpi = 300,
        units = "cm")
 
 ### END
