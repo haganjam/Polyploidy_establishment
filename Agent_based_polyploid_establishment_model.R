@@ -158,4 +158,12 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
   
 }
 
+# test the model
+# Minority_cyto_model(ts = 500, sites = 100, P_D = 0.9, X_pol = 0.1,
+                    # pol_eff = 0.8, self = 0.5, 
+                    # seedP = NA, seedD = 5, 
+                    # fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
+                    # death_prop = 0.10,
+                    # plot = TRUE)
+
 ### END
