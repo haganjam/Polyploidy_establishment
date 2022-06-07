@@ -174,8 +174,12 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
   # summarise the output
   dfx <- data.frame(time = 1:ts)
   
+  # add the fitness of the polyploid if fit.ran == TRUE
+  if (fit_ran) {
+    dfx$seedPx <- seedPx
+  }
+  
   # add the proportion of outcrossing seeds
-  print(o.seeds)
   dfx$o.seeds <- o.seeds
   
   # add proportion of polyploids through time
@@ -187,11 +191,11 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
 }
 
 # test the model
-Minority_cyto_model(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.9,
-                    pol_eff = 0.8, self = 0.5, 
-                    seedP = NA, seedD = 5, 
-                    fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
-                    death_prop = 0.10,
-                    plot = TRUE) 
+# Minority_cyto_model(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.9,
+                    # pol_eff = 0.8, self = 0.5, 
+                    # seedP = NA, seedD = 5, 
+                    # fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
+                    # death_prop = 0.10,
+                    # plot = TRUE) 
 
 ### END
