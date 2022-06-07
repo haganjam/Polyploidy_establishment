@@ -41,6 +41,7 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
                                 fit_ran.sd = 2.5, death_prop = 0.10,
                                 plot = TRUE) {
   
+  
   # if fit_ran is true then we add a random deviation
   if(fit_ran) {
     seedPx <- round(seedD + rnorm(n = 1, mean = fit_ran.m, sd = fit_ran.sd), 0)
@@ -55,6 +56,10 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
   
   # randomise the vector
   output[[1]] <- v[sample(1:length(v), length(v), replace = FALSE)]
+  
+  # get vector for proportion of outcrossed seeds
+  o.seeds <- vector(length = length(ts-1))
+  o.seeds[1] <- 0
   
   # loop over temporally
   for (i in 2:ts) {
@@ -86,6 +91,7 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
         if (x != y) {
           TRIP <- round(u*pol_eff, 0)
           a <- round(u*self, 0)
+          o.a <- 0
           assign(x = x, value = ifelse( (a + TRIP) > u, (u - TRIP), a ) )
         }
         
@@ -94,19 +100,33 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
         if (x == y) {
           TRIP <- 0
           a <- round(u*self, 0)
-          assign(x = x, value = ifelse( (pol_eff*u + a) > u, u, (pol_eff*u + a) ) )
+          o.a <- round(pol_eff*u, 0)
+          assign(x = x, value = ifelse( (o.a + a) > u, u, (o.a + a) ) )
         }
         
         # assign the other cytotype zero
         b <- c("D", "P")
         assign(x = b[b != x], 0)
         
-        # create a pool of seeds
-        return(rep( c("T", "D", "P"), c(TRIP, D, P)))
+        # create an object to output
+        out <- rep( c("T", "D", "P"), c(TRIP, D, P))
         
-      },  m[m.p], n, SIMPLIFY = TRUE, USE.NAMES = FALSE)
+        # add an attribute to the object
+        attr(out, "o.seeds") <- o.a
+        
+        # create a pool of seeds
+        return(out)
+        
+      },  m[m.p], n, SIMPLIFY = FALSE, USE.NAMES = FALSE)
     
+    # get the number of non-triploid seeds that are outcrossed
+    o.seedsx <- sum(unlist( lapply(oc_tn, function(z) { attr(z, "o.seeds") }) ))
+    
+    # convert the oc_tn list into a vector
     oc_tn <- unlist(oc_tn)
+    
+    # get rid of the triploids
+    oc_tn <- oc_tn[oc_tn != "T"]
     
     # get the seed pool from selfing
     self_tn <- 
@@ -121,13 +141,17 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
         
       })
     
+    # convert self_tn into a vector
     self_tn <- unlist(self_tn)
+    
+    # get rid of the triploids
+    self_tn <- self_tn[self_tn != "T"]
     
     # combine the seed sets
     disp <- c(oc_tn, self_tn)
     
-    # get rid of the triploids
-    disp <- disp[disp != "T"]
+    # calculate the proportion of seeds due to outcrossing
+    o.seeds[i] <- o.seedsx/length(disp)
     
     # implement death and recolonisation from the seed pool
     death <- round(death_prop*length(m), 0)
@@ -150,6 +174,10 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
   # summarise the output
   dfx <- data.frame(time = 1:ts)
   
+  # add the proportion of outcrossing seeds
+  print(o.seeds)
+  dfx$o.seeds <- o.seeds
+  
   # add proportion of polyploids through time
   dfx$prop_P <- unlist(lapply(output, function(y) sum(y == "P")/length(y)))
   
@@ -159,11 +187,11 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
 }
 
 # test the model
-# Minority_cyto_model(ts = 500, sites = 100, P_D = 0.9, X_pol = 0.1,
-                    # pol_eff = 0.8, self = 0.5, 
-                    # seedP = NA, seedD = 5, 
-                    # fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
-                    # death_prop = 0.10,
-                    # plot = TRUE)
+Minority_cyto_model(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.9,
+                    pol_eff = 0.8, self = 0.5, 
+                    seedP = NA, seedD = 5, 
+                    fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
+                    death_prop = 0.10,
+                    plot = TRUE) 
 
 ### END
