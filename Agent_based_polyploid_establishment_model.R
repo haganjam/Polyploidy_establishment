@@ -14,7 +14,6 @@
 #' Matrix products: default
 #' 
 #' attached base packages: stats, graphics, grDevices, utils, datasets, methods, base
-#' other attached packages: ggplot2_3.3.5, dplyr_1.0.7 
 #' 
 #' @param ts - number of timesteps to simulate
 #' @param sites - number of patches to model (each patch is occupied by one individual plant)
@@ -189,13 +188,5 @@ Minority_cyto_model <- function(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.5,
   return(dfx)
   
 }
-
-# test the model
-# Minority_cyto_model(ts = 100, sites = 100, P_D = 0.9, X_pol = 0.9,
-                    # pol_eff = 0.8, self = 0.5, 
-                    # seedP = NA, seedD = 5, 
-                    # fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
-                    # death_prop = 0.10,
-                    # plot = TRUE) 
 
 ### END

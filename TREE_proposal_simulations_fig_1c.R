@@ -6,16 +6,12 @@
 # load relevant libraries
 library(here)
 library(dplyr)
-library(ggplot2)
+library(foreach)
+library(doParallel)
 
 # load the relevant functions
 source(here("Agent_based_polyploid_establishment_model.R"))
-source(here("Function_plotting_theme.R"))
 
-# check that we have a figures folder
-if(! dir.exists(here("Figures"))){
-  dir.create(here("Figures"))
-}
 
 # fig. 1c
 
@@ -29,9 +25,9 @@ death_prop <- 0.10
 
 # frequency of the majority cytotype
 P_D <- c(0.95)
-X_pol <- seq(0.10, 0.90, 0.20)
-pol_eff <- seq(0.40, 0.90, 0.20)
-self <- seq(0.10, 0.90, 0.20)
+X_pol <- c(0.10, 0.90)
+pol_eff <- c(0.80)
+self <- c(0.10, 0.90)
 seedP <- NA
 seedD <- c(5)
 
@@ -57,27 +53,31 @@ df$modid <- as.character(1:nrow(df))
 # make a unique id for each model group
 df$mod_group <- mod_group
 
-# check the dimensions
-dim(df)
-head(df)
-
 # reorder the columns
 df <- 
   df %>%
   select(mod_group, modid, nreps, sites, ts, death_prop, pol_eff,
          X_pol, P_D, self, seedP, seedD)
 
-# set-up an output list
-modlist <- vector("list", length = nrow(df))
-
 # choose the threshold of persistence
 thresh_p <- 0.5
 
-pb <- txtProgressBar(min = 0, max = nrow(df), initial = 0)
-for(i in 1:nrow(df)) {
-  
-  # update the progress bar
-  setTxtProgressBar(pb,i)
+# set-up a parallel for-loop
+n.cores <- 10
+
+#create the cluster
+my.cluster <- parallel::makeCluster(
+  n.cores, 
+  type = "PSOCK"
+)
+
+#register it to be used by %dopar%
+doParallel::registerDoParallel(cl = my.cluster)
+
+# pb <- txtProgressBar(min = 0, max = nrow(df), initial = 0)
+modlist <- foreach(
+  i = 1:nrow(df)
+  ) %dopar% {
   
   x <- Minority_cyto_model(ts = df$ts[i], sites = df$sites[i], P_D = df$P_D[i], X_pol = df$X_pol[i],
                            pol_eff = df$pol_eff[i], self = df$self[i], 
@@ -93,11 +93,9 @@ for(i in 1:nrow(df)) {
   
   y$thresh <- ifelse(unique(y$prop_P) > thresh_p, 1, 0)
   
-  modlist[[i]] <- y
+  return(y)
   
 }
-# close the progress bar
-close(pb)
 
 # bind the rows of the model output
 modlist <- dplyr::bind_rows(modlist, .id = "modid")
@@ -105,15 +103,16 @@ modlist <- dplyr::bind_rows(modlist, .id = "modid")
 # bind the model output to the parameters
 modlist <- dplyr::full_join(df, modlist, by = "modid")
 
-# check the data
-summary(modlist)
-
 # summarise these data per parameter set
-modlist %>%
+modlist <- 
+  modlist %>%
   group_by(mod_group, sites, ts, death_prop, pol_eff, X_pol, P_D, self, seedP, seedD) %>%
   summarise(fit_diff = mean(fit_diff),
             o.seeds_mean = mean(o.seeds_mean),
             prop_P = mean(prop_P),
-            thresh = sum(thresh)/n())
+            thresh = sum(thresh)/n()) %>%
+  ungroup()
+
+write.csv(x = modlist, here("fig_1c_data.csv"))
 
 ### END
