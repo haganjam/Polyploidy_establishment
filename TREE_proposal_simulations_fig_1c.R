@@ -10,7 +10,7 @@ library(foreach)
 library(doParallel)
 
 # load the relevant functions
-source(here("Agent_based_polyploid_establishment_model.R"))
+source(here("Polyploidy_establishment/Agent_based_polyploid_establishment_model.R"))
 
 
 # fig. 1c
@@ -113,6 +113,6 @@ modlist <-
             thresh = sum(thresh)/n()) %>%
   ungroup()
 
-write.csv(x = modlist, here("fig_1c_data.csv"))
+write.csv(x = modlist, here("Polyploidy_establishment/fig_1c_data.csv"))
 
 ### END
