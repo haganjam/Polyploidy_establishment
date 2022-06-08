@@ -1,7 +1,16 @@
 
 # Project: Polyploidy establishment and reproductive traits
 
-# Title: Run simulations for TREE proposal
+# Title: Run full set of simulations for TREE proposal
+
+# Description:
+
+# These simulations were run on the Albiorix (https://albiorix.bioenv.gu.se/)
+# computer cluster because the code is too slow on a regular desktop computer.
+# Thus, the paths that access the model function and output the data are
+# customised for the directories on the computer cluster. If you want to 
+# run this code on a normal desktop computer, then you need to modify the
+# paths appropriately.
 
 # load relevant libraries
 library(here)
