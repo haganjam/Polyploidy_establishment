@@ -16,7 +16,7 @@ source(here("Agent_based_polyploid_establishment_model.R"))
 # fig. 1c
 
 # set the number of simulation replicates
-nreps <- 2
+nreps <- 3
 
 # sites and number of time-steps are fixed
 sites <- 100
