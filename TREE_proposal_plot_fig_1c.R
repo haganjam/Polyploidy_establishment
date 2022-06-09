@@ -63,9 +63,6 @@ grps <- cut(zval, brks, include.lowest = TRUE)
 levels(grps) <- brks
 
 df.int$zval <- as.numeric(as.character(grps))
-df.int
-
-col.ramp <- colorRampPalette(c("black","darkblue","blue","grey90"),interpolate="linear")(length(brks))
 
 ggplot(data = df.int,
        mapping = aes(x = o.seeds_mean, y = fit_diff,
@@ -81,6 +78,7 @@ ggplot(data = df.int,
                                 barwidth = 10,
                                 barheight = 0.5)) +
   labs(fill = "Polyploid persistence") +
+  geom_hline(yintercept = 0, colour = "white", linetype = "dashed") +
   theme_meta() +
   theme(legend.position = "top",
         legend.direction="horizontal",
