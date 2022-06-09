@@ -25,7 +25,7 @@ source(here("Polyploidy_establishment/Agent_based_polyploid_establishment_model.
 # fig. 1c
 
 # set the number of simulation replicates
-nreps <- 20
+nreps <- 100
 
 # sites and number of time-steps are fixed
 sites <- 100
@@ -34,9 +34,9 @@ death_prop <- 0.10
 
 # frequency of the majority cytotype
 P_D <- c(0.95)
-X_pol <- c(0.1, 0.3, 0.5, 0.7)
-pol_eff <- c(0.4, 0.5, 0.6, 0.7)
-self <- seq(0.10, 0.90, length.out = 5)
+X_pol <- seq(0.1, 0.9, 0.1)
+pol_eff <- seq(0.4, 0.9, 0.1)
+self <- seq(0.1, 0.9, 0.1)
 seedP <- NA
 seedD <- c(8)
 

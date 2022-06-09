@@ -39,11 +39,11 @@ lm.x <- lm(thresh ~ fit_diff*o.seeds_mean, data = fdat)
 
 # set-up the y-values
 yval <- range(fdat$fit_diff)
-yval <- rep(seq(yval[1], yval[2], l = 20))
+yval <- rep(seq(yval[1], yval[2], l = 50))
 
 # set-up the x-values
 xval <- range(fdat$o.seeds_mean)
-xval <- rep(seq(xval[1], xval[2], l = 20))
+xval <- rep(seq(xval[1], xval[2], l = 50))
 
 # create a data.frame
 df.int <- 
@@ -54,16 +54,41 @@ head(df.int)
 df.int$thresh <- predict(object = lm.x, df.int)
 head(df.int)
 
+zval <- ifelse(df.int$thresh < 0, 0, df.int$thresh)
+zval <- ifelse(zval > 1, 1, zval)
+
+brks <- seq(0, 1, length.out = 51)
+
+grps <- cut(zval, brks, include.lowest = TRUE)
+levels(grps) <- brks
+
+df.int$zval <- as.numeric(as.character(grps))
+df.int
+
+col.ramp <- colorRampPalette(c("black","darkblue","blue","grey90"),interpolate="linear")(length(brks))
+
 ggplot(data = df.int,
        mapping = aes(x = o.seeds_mean, y = fit_diff,
-                     fill = thresh, colour = thresh)) +
+                     fill = zval)) +
   geom_tile() +
-  scale_fill_viridis_c() +
-  scale_colour_viridis_c() + 
-  theme_meta()
+  scale_fill_viridis_c(alpha = 0.7, end = 0.9) +
+  ylab("Fitness difference") +
+  xlab("Outcrossed seed proportion") +
+  guides(fill = guide_colourbar(title.position = "top", 
+                                title.vjust = 1,
+                                frame.colour = "black", 
+                                ticks.colour = NA,
+                                barwidth = 10,
+                                barheight = 0.5)) +
+  labs(fill = "Polyploid persistence") +
+  theme_meta() +
+  theme(legend.position = "top",
+        legend.direction="horizontal",
+        legend.justification=c(0.1), 
+        legend.key.width=unit(1, "lines"),
+        legend.text = element_text(size = 9),
+        legend.title = element_text(size = 10),
+        legend.margin=margin(0,0,0,0),
+        legend.box.margin=margin(0,0,-5,0))
 
-
-
-
-
-
+### END
