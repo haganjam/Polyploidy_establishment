@@ -20,6 +20,7 @@ if(! dir.exists(here("Figures"))){
 # read the simulation data
 fdat <- read_csv(here("Data/fig_1c_data.csv"))
 head(fdat)
+dim(fdat)
 
 # remove the first column
 fdat <- fdat[, -1]
@@ -79,6 +80,7 @@ ggplot(data = df.int,
                                 barheight = 0.5)) +
   labs(fill = "Polyploid persistence") +
   geom_hline(yintercept = 0, colour = "white", linetype = "dashed") +
+  scale_y_continuous(limits = c(-0.8, 0.8)) +
   theme_meta() +
   theme(legend.position = "top",
         legend.direction="horizontal",
