@@ -34,7 +34,7 @@ P_D <- c(0.95)
 pol_eff <- c(0.80)
 self <- c(0.80)
 seedP <- NA
-seedD <- c(10)
+seedD <- c(8)
 
 # create a parameter set
 df <- expand.grid(nreps = 1:nreps, 
@@ -86,7 +86,8 @@ modlist <-
 modlist.sum <- 
   modlist %>%
   group_by(self, X_pol, time) %>%
-  summarise(prop_P.m = mean(prop_P), .groups = "drop")
+  summarise(prop_P.m = mean(prop_P),
+            n = n(), .groups = "drop")
 
 # visualise the results
 names(modlist)
@@ -94,30 +95,30 @@ names(modlist)
 p1 <- 
   ggplot() +
   geom_line(data = modlist %>% 
-              mutate(X_pol = as.character(X_pol)) %>%
-              filter(self == 0.8), 
+              mutate(X_pol = as.character(X_pol)), 
             mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
             size = 0.1, alpha = 0.2) +
   geom_line(data = modlist.sum %>%
-              mutate(X_pol = as.character(X_pol)) %>%
-              filter(self == 0.8),
+              mutate(X_pol = as.character(X_pol)),
             mapping = aes(x = time, y = prop_P.m, colour = X_pol),
             size = 1, alpha = 1) +
   geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
   scale_y_continuous(limits = c(0, 1)) +
   ylab("Minority cytotype freq.") +
   xlab("Generations") +
-  ggtitle("Selfing rate = 0.8") +
-  guides(colour = guide_legend(title = "Outcrossing rate",
+  # ggtitle("Selfing rate = 0.8") +
+  guides(colour = guide_legend(title = "Pollination rate",
                                override.aes = list(size = 1.5,
                                                    alpha = 1))) +
   scale_colour_viridis_d(end = 0.9) +
   theme_meta() +
   theme(axis.text = element_text(colour = "black"),
-        legend.position = "bottom",
+        legend.position = "top",
         legend.key = element_rect(fill = NA, color = NA),
         legend.title = element_text(size = 12),
-        legend.text = element_text(size = 11))
+        legend.text = element_text(size = 11),
+        legend.margin=margin(0,0,8,0),
+        legend.box.margin=margin(0,0,-5,0))
 p1
 
 # export this figure

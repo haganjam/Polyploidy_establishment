@@ -65,30 +65,39 @@ levels(grps) <- brks
 
 df.int$zval <- as.numeric(as.character(grps))
 
-ggplot(data = df.int,
+p1 <- 
+  ggplot(data = df.int,
        mapping = aes(x = o.seeds_mean, y = fit_diff,
                      fill = zval)) +
   geom_tile() +
   scale_fill_viridis_c(alpha = 0.7, end = 0.9) +
   ylab("Fitness difference") +
   xlab("Outcrossed seed proportion") +
-  guides(fill = guide_colourbar(title.position = "top", 
-                                title.vjust = 1,
+  guides(fill = guide_colourbar(title.position = "left", 
+                                title.vjust = 1.05,
                                 frame.colour = "black", 
                                 ticks.colour = NA,
-                                barwidth = 10,
-                                barheight = 0.5)) +
-  labs(fill = "Polyploid persistence") +
+                                barwidth = 7.5,
+                                barheight = 0.7,
+                                label.hjust = 0.1,
+                                label.vjust = 3)) +
+  labs(fill = "Establishment") +
   geom_hline(yintercept = 0, colour = "white", linetype = "dashed") +
   scale_y_continuous(limits = c(-0.8, 0.8)) +
   theme_meta() +
   theme(legend.position = "top",
         legend.direction="horizontal",
-        legend.justification=c(0.1), 
+        legend.justification=c(0.35), 
         legend.key.width=unit(1, "lines"),
         legend.text = element_text(size = 9),
-        legend.title = element_text(size = 10),
+        legend.title = element_text(size = 12),
         legend.margin=margin(0,0,0,0),
         legend.box.margin=margin(0,0,-5,0))
+p1
+
+# export this figure
+ggsave(filename = here("Figures/fig_1c.png"), 
+       plot = p1, width = 12, height = 11, dpi = 300,
+       units = "cm")
 
 ### END
