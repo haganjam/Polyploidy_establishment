@@ -107,7 +107,7 @@ p1 <-
   ylab("Minority cytotype freq.") +
   xlab("Generations") +
   # ggtitle("Selfing rate = 0.8") +
-  guides(colour = guide_legend(title = "Pollination rate",
+  guides(colour = guide_legend(title = "Outcross probability",
                                override.aes = list(size = 1.5,
                                                    alpha = 1))) +
   scale_colour_viridis_d(end = 0.9) +
@@ -117,7 +117,7 @@ p1 <-
         legend.key = element_rect(fill = NA, color = NA),
         legend.title = element_text(size = 12),
         legend.text = element_text(size = 11),
-        legend.margin=margin(0,0,8,0),
+        legend.margin=margin(1,0,6.5,0),
         legend.box.margin=margin(0,0,-5,0))
 p1
 

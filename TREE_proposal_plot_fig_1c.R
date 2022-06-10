@@ -29,27 +29,27 @@ summary(fdat)
 
 # plot the data
 ggplot(data = fdat, 
-       mapping = aes(x = o.seeds_mean, y = fit_diff, colour = thresh)) +
+       mapping = aes(x = X_pol, y = self, colour = thresh)) +
   geom_point() +
   theme_meta()
 
 # fit a model of thresh using outcrossing and fitness difference
-lm.x <- lm(thresh ~ fit_diff*o.seeds_mean, data = fdat)
+lm.x <- lm(thresh ~ X_pol*self, data = fdat)
 
 # use this model to interpolate unknown, missing values
 
 # set-up the y-values
-yval <- range(fdat$fit_diff)
+yval <- range(fdat$self)
 yval <- rep(seq(yval[1], yval[2], l = 50))
 
 # set-up the x-values
-xval <- range(fdat$o.seeds_mean)
+xval <- range(fdat$X_pol)
 xval <- rep(seq(xval[1], xval[2], l = 50))
 
 # create a data.frame
 df.int <- 
-  expand.grid(fit_diff = yval,
-              o.seeds_mean = xval)
+  expand.grid(self = yval,
+              X_pol = xval)
 head(df.int)
 
 df.int$thresh <- predict(object = lm.x, df.int)
@@ -67,23 +67,22 @@ df.int$zval <- as.numeric(as.character(grps))
 
 p1 <- 
   ggplot(data = df.int,
-       mapping = aes(x = o.seeds_mean, y = fit_diff,
+       mapping = aes(x = X_pol, y = self,
                      fill = zval)) +
   geom_tile() +
   scale_fill_viridis_c(alpha = 0.7, end = 0.9) +
-  ylab("Fitness difference") +
-  xlab("Outcrossed seed proportion") +
+  ylab("Selfing ability") +
+  xlab("Outcross probability") +
   guides(fill = guide_colourbar(title.position = "left", 
-                                title.vjust = 1.05,
+                                title.vjust = 0.9,
+                                title.hjust = 5,
                                 frame.colour = "black", 
                                 ticks.colour = NA,
-                                barwidth = 7.5,
+                                barwidth = 8,
                                 barheight = 0.7,
-                                label.hjust = 0.1,
+                                label.hjust = 0.3,
                                 label.vjust = 3)) +
   labs(fill = "Establishment") +
-  geom_hline(yintercept = 0, colour = "white", linetype = "dashed") +
-  scale_y_continuous(limits = c(-0.8, 0.8)) +
   theme_meta() +
   theme(legend.position = "top",
         legend.direction="horizontal",
@@ -92,7 +91,8 @@ p1 <-
         legend.text = element_text(size = 9),
         legend.title = element_text(size = 12),
         legend.margin=margin(0,0,0,0),
-        legend.box.margin=margin(0,0,-5,0))
+        legend.box.margin=margin(0,0,-5,0),
+        legend.spacing.x = unit(0.6, "cm"))
 p1
 
 # export this figure
