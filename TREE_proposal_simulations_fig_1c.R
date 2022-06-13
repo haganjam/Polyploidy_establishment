@@ -34,11 +34,11 @@ death_prop <- 0.10
 
 # frequency of the majority cytotype
 P_D <- c(0.95)
-X_pol <- seq(0.1, 0.9, 0.1)
-pol_eff <- seq(0.4, 0.9, 0.1)
-self <- seq(0.1, 0.9, 0.1)
+X_pol <- seq(0.05, 0.95, 0.1)
+pol_eff <- seq(0.6, 0.9, 0.1)
+self <- seq(0.05, 0.95, 0.1)
 seedP <- NA
-seedD <- c(8)
+seedD <- c(10)
 
 # create a parameter set
 df <- expand.grid(nreps = 1:nreps, 
