@@ -35,10 +35,10 @@ death_prop <- 0.10
 # frequency of the majority cytotype
 P_D <- c(0.95)
 X_pol <- seq(0.05, 0.95, 0.1)
-pol_eff <- seq(0.6, 0.9, 0.1)
+pol_eff <- 0.8
 self <- seq(0.05, 0.95, 0.1)
 seedP <- NA
-seedD <- c(10)
+seedD <- c(8)
 
 # create a parameter set
 df <- expand.grid(nreps = 1:nreps, 
@@ -91,7 +91,7 @@ modlist <- foreach(
   x <- Minority_cyto_model(ts = df$ts[i], sites = df$sites[i], P_D = df$P_D[i], X_pol = df$X_pol[i],
                            pol_eff = df$pol_eff[i], self = df$self[i], 
                            seedP = df$seedP[i], seedD = df$seedD[i], 
-                           fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 2.5,
+                           fit_ran = TRUE, fit_ran.m = 0, fit_ran.sd = 3,
                            death_prop = df$death_prop[i],
                            plot = FALSE)
   

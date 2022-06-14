@@ -33,8 +33,14 @@ ggplot(data = fdat,
   geom_point() +
   theme_meta()
 
+# filter out X_pol and selfing rates below 0.
+fdat <- 
+  fdat %>%
+  filter(X_pol >= 0.1, self >= 0.1)
+
 # fit a model of thresh using outcrossing and fitness difference
-lm.x <- lm(thresh ~ X_pol*self, data = fdat)
+lm.x <- lm(thresh ~ X_pol*self + pol_eff + fit_diff, data = fdat)
+summary(lm.x)
 
 # use this model to interpolate unknown, missing values
 
