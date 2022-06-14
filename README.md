@@ -13,20 +13,24 @@ Details of how the simulation model works can be found in the following file:
 
 + "Project_documentation.Rmd"
 
-To reproduce Fig. 1b, run the script called:
+To reproduce Fig. 2a, run the script called:
 
 + "TREE_proposal_simulations_fig_1b.R"
 
-This script runs a simulation varying the probability of outcrossing, plots and exports the plot.
+This script runs a simulation varying the probability of outcrossing, plots and exports the plot as a .png file and as an .RData file.
 
-To reproduce Fig. 1c, you will need two scripts:
+To reproduce Fig. 2b, you will need two scripts:
 
 + "TREE_proposal_simulations_fig_1c.R"
 + "TREE_proposal_plot_fig_1c.R"
 
 This code, however, will take a long time to run on a regular desktop computer. The simulations were run on the Albiorix computer cluster using 10 cores (http://mtop.github.io/albiorix/site/manual.html).
 
-Then, the second script takes the output of this model and plots it.
+Then, the second script takes the output of this model and plots it as a .png file and as an .RData file.
+
+Once these scripts have been run, the following script merges the two figures and outputs the complete Fig. 2 as a .png file:
+
++ TREE_proposal_comb_fig_2ab.R
 
 *Trait-ploidy correlations*
 
