@@ -33,40 +33,7 @@ ggplot(data = fdat,
   geom_point() +
   theme_meta()
 
-# fit a model of thresh using outcrossing and fitness difference
-lm.x <- lm(thresh ~ X_pol*self + pol_eff + fit_diff, data = fdat)
-summary(lm.x)
-
-# use this model to interpolate unknown, missing values
-
-# set-up the y-values
-yval <- range(fdat$self)
-yval <- rep(seq(yval[1], yval[2], l = 50))
-
-# set-up the x-values
-xval <- range(fdat$X_pol)
-xval <- rep(seq(xval[1], xval[2], l = 50))
-
-# create a data.frame
-df.int <- 
-  expand.grid(self = yval,
-              X_pol = xval)
-head(df.int)
-
-df.int$thresh <- predict(object = lm.x, df.int)
-head(df.int)
-
-zval <- ifelse(df.int$thresh < 0, 0, df.int$thresh)
-zval <- ifelse(zval > 1, 1, zval)
-
-brks <- seq(0, 1, length.out = 51)
-
-grps <- cut(zval, brks, include.lowest = TRUE)
-levels(grps) <- brks
-
-df.int$zval <- as.numeric(as.character(grps))
-
-p1 <- 
+p2 <- 
   ggplot(data = fdat,
        mapping = aes(x = X_pol, y = self,
                      fill = thresh)) +
@@ -94,12 +61,12 @@ p1 <-
         legend.margin=margin(0,0,0,0),
         legend.box.margin=margin(0,0,-5,0),
         legend.spacing.x = unit(0.6, "cm"))
-p1
-save("p1", file = here("Figures", "Fig_2b.RData"))
+p2
+save("p2", file = here("Figures", "Fig_2b.RData"))
 
 # export this figure
 ggsave(filename = here("Figures/Fig_2b.png"), 
-       plot = p1, width = 12, height = 11, dpi = 300,
+       plot = p2, width = 12, height = 11, dpi = 300,
        units = "cm")
 
 ### END
