@@ -120,9 +120,10 @@ p1 <-
         legend.margin=margin(1,0,6.5,0),
         legend.box.margin=margin(0,0,-5,0))
 p1
+save("p1", file = here("Figures", "Fig_2a.RData"))
 
 # export this figure
-ggsave(filename = here("Figures/fig_1b.png"), 
+ggsave(filename = here("Figures/Fig_2b.png"), 
        plot = p1, width = 12, height = 11, dpi = 300,
        units = "cm")
 

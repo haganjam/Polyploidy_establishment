@@ -33,11 +33,6 @@ ggplot(data = fdat,
   geom_point() +
   theme_meta()
 
-# filter out X_pol and selfing rates below 0.
-fdat <- 
-  fdat %>%
-  filter(X_pol >= 0.1, self >= 0.1)
-
 # fit a model of thresh using outcrossing and fitness difference
 lm.x <- lm(thresh ~ X_pol*self + pol_eff + fit_diff, data = fdat)
 summary(lm.x)
@@ -72,9 +67,9 @@ levels(grps) <- brks
 df.int$zval <- as.numeric(as.character(grps))
 
 p1 <- 
-  ggplot(data = df.int,
+  ggplot(data = fdat,
        mapping = aes(x = X_pol, y = self,
-                     fill = zval)) +
+                     fill = thresh)) +
   geom_tile() +
   scale_fill_viridis_c(alpha = 0.7, end = 0.9) +
   ylab("Selfing ability") +
@@ -100,9 +95,10 @@ p1 <-
         legend.box.margin=margin(0,0,-5,0),
         legend.spacing.x = unit(0.6, "cm"))
 p1
+save("p1", file = here("Figures", "Fig_2b.RData"))
 
 # export this figure
-ggsave(filename = here("Figures/fig_1c.png"), 
+ggsave(filename = here("Figures/Fig_2b.png"), 
        plot = p1, width = 12, height = 11, dpi = 300,
        units = "cm")
 
