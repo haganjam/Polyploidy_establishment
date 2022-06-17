@@ -1,7 +1,7 @@
 
 # Project: Polyploidy establishment and reproductive traits
 
-# Title: Plot simulation results for fig. 1c
+# Title: Plot simulation results for fig. 2b
 
 # load relevant libraries
 library(here)

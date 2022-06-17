@@ -1,7 +1,7 @@
 
 # Project: Polyploidy establishment and reproductive traits
 
-# Title: Run simulations for TREE proposal
+# Title: Run simulations for TREE proposal for fig. 2a
 
 # load relevant libraries
 library(here)
