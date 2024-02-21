@@ -1,0 +1,2 @@
+# copy simulated data from the cluster to my local computer
+sftp james@albiorix.bioenv.gu.se:Polyploidy_establishment/data/sim_data.csv Documents/code_projects/Polyploidy_establishment/data
