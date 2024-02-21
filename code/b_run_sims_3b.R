@@ -21,7 +21,7 @@ library(doParallel)
 source(here("Polyploidy_establishment/code/model.R"))
 
 # set the number of simulation replicates
-nreps <- 10
+nreps <- 1000
 
 # sites and number of time-steps are fixed
 sites <- 100
