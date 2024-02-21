@@ -1,7 +1,7 @@
 
 # Project: Polyploidy establishment and reproductive traits
 
-# Title: Plot simulation results for fig. 2b
+# Title: Plot simulation results for fig. 3b
 
 # load relevant libraries
 library(here)
@@ -10,15 +10,15 @@ library(ggplot2)
 library(readr)
 
 # load the relevant functions
-source(here("Function_plotting_theme.R"))
+source(here("code/helper-plotting-theme.R"))
 
 # check that we have a figures folder
-if(! dir.exists(here("Figures"))){
-  dir.create(here("Figures"))
+if(! dir.exists(here("figures-tables"))){
+  dir.create(here("figures-tables"))
 }
 
 # read the simulation data
-fdat <- read_csv(here("Data/fig_1c_data.csv"))
+fdat <- read_csv(here("data/sim_data.csv"))
 head(fdat)
 dim(fdat)
 
@@ -61,12 +61,7 @@ p2 <-
         legend.margin=margin(0,0,0,0),
         legend.box.margin=margin(0,0,-5,0),
         legend.spacing.x = unit(0.6, "cm"))
-p2
-save("p2", file = here("Figures", "Fig_2b.RData"))
-
-# export this figure
-ggsave(filename = here("Figures/Fig_2b.png"), 
-       plot = p2, width = 12, height = 11, dpi = 300,
-       units = "cm")
+plot(p2)
+save("p2", file = here("figures-tables", "fig3b.RData"))
 
 ### END

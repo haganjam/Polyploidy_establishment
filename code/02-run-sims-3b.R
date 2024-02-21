@@ -118,6 +118,11 @@ modlist <-
             thresh = sum(thresh)/n()) %>%
   ungroup()
 
+# check that we have a figures folder
+if(! dir.exists(here("Polyploidy_establishment/data"))){
+  dir.create(here("Polyploidy_establishment/data"))
+}
+
 # write the output to a .csv file
 write.csv(x = modlist, here("Polyploidy_establishment/data/sim_data.csv"))
 
