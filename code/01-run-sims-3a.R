@@ -1,7 +1,8 @@
-
-# Project: Polyploidy establishment and reproductive traits
-
-# Title: Run simulations for TREE proposal for fig. 2a
+#'
+#' @project: Polyploidy establishment and reproductive traits
+#'
+#' @title: Run simulations and plot fig. 3a
+#'
 
 # load relevant libraries
 library(here)
@@ -9,16 +10,13 @@ library(dplyr)
 library(ggplot2)
 
 # load the relevant functions
-source(here("Agent_based_polyploid_establishment_model.R"))
-source(here("Function_plotting_theme.R"))
+source(here("code/model.R"))
+source(here("code/helper-plotting-theme.R"))
 
 # check that we have a figures folder
-if(! dir.exists(here("Figures"))){
-  dir.create(here("Figures"))
+if(! dir.exists(here("figures-tables"))){
+  dir.create(here("figures-tables"))
 }
-
-
-# fig. 1b
 
 # set the number of simulation replicates
 nreps <- 100
@@ -119,12 +117,9 @@ p1 <-
         legend.text = element_text(size = 11),
         legend.margin=margin(1,0,6.5,0),
         legend.box.margin=margin(0,0,-5,0))
-p1
-save("p1", file = here("Figures", "Fig_2a.RData"))
+plot(p1)
 
-# export this figure
-ggsave(filename = here("Figures/Fig_2b.png"), 
-       plot = p1, width = 12, height = 11, dpi = 300,
-       units = "cm")
+# export the figure
+save("p1", file = here("figures-tables", "fig3a.RData"))
 
 ### END

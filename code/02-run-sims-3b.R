@@ -1,16 +1,15 @@
-
-# Project: Polyploidy establishment and reproductive traits
-
-# Title: Run full set of simulations for TREE proposal
-
-# Description:
-
-# These simulations were run on the Albiorix (https://albiorix.bioenv.gu.se/)
-# computer cluster because the code is too slow on a regular desktop computer.
-# Thus, the paths that access the model function and output the data are
-# customised for the directories on the computer cluster. If you want to 
-# run this code on a normal desktop computer, then you need to modify the
-# paths appropriately.
+#'
+#' @project: Polyploidy establishment and reproductive traits
+#'
+#' @title: Run the set of simulations used to plot fig. 3b
+#'
+#' @description: These simulations were run on the Albiorix (https://albiorix.bioenv.gu.se/)
+#' computer cluster because the code is too slow on a regular desktop computer.
+#' Thus, the paths that access the model function and output the data are
+#' customised for the directories on the computer cluster. If you want to 
+#' run this code on a normal desktop computer, then you need to modify the
+#' paths appropriately.
+#' 
 
 # load relevant libraries
 library(here)
@@ -19,16 +18,13 @@ library(foreach)
 library(doParallel)
 
 # load the relevant functions
-source(here("Polyploidy_establishment/Agent_based_polyploid_establishment_model.R"))
-
-
-# fig. 1c
+source(here("Polyploidy_establishment/code/model.R"))
 
 # set the number of simulation replicates
-nreps <- 100
+nreps <- 500
 
 # sites and number of time-steps are fixed
-sites <- 100
+sites <- 1000
 ts <- 500
 death_prop <- 0.10
 
@@ -122,6 +118,7 @@ modlist <-
             thresh = sum(thresh)/n()) %>%
   ungroup()
 
-write.csv(x = modlist, here("Polyploidy_establishment/sim_data.csv"))
+# write the output to a .csv file
+write.csv(x = modlist, here("Polyploidy_establishment/data/sim_data.csv"))
 
 ### END
