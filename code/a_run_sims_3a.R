@@ -108,7 +108,7 @@ p1 <-
   guides(colour = guide_legend(title = "Outcross probability",
                                override.aes = list(size = 1.5,
                                                    alpha = 1))) +
-  scale_colour_viridis_d(end = 0.9) +
+  scale_colour_viridis_d(end = 0.85, option = "C", direction = -1) +
   theme_meta() +
   theme(axis.text = element_text(colour = "black"),
         legend.position = "top",
