@@ -1,7 +1,6 @@
 ---
 title: "Polyploidy establishment: Project documentation"
-output:
-html_notebook: default
+output: rmarkdown::github_document
 ---
 
 # Project goals
@@ -34,5 +33,4 @@ For non-pollinated individuals, we use the same procedure but only consider the 
 Once all individuals in the population have set seed either through outcrossing, selfing or both, all the produced seeds make it into a global seed pool. Next, we choose some number of plants to die. The number is the rounded value of (*death_prop x sites*). These are replaced by random draws from the global seed pool. Thus, the model implicitly assumes zero-sum dynamics whereby every individual that dies is replaced by a new individual whilst total community size remains constant (as per Hubbell 2001).
 
 Once the dead plants have been replaced, we start the cycle again. Using this model, we can track the proportion of D and P cytotypes through time. By varying the different parameters for outcrossing, fitness and selfing, we can determine which factors are most important for reducing minority cytotype exclusion. The number of time-steps is set by the *ts* parameter.
-
 

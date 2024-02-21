@@ -122,6 +122,6 @@ modlist <-
             thresh = sum(thresh)/n()) %>%
   ungroup()
 
-write.csv(x = modlist, here("Polyploidy_establishment/fig_1c_data.csv"))
+write.csv(x = modlist, here("Polyploidy_establishment/sim_data.csv"))
 
 ### END
