@@ -21,10 +21,10 @@ library(doParallel)
 source(here("Polyploidy_establishment/code/model.R"))
 
 # set the number of simulation replicates
-nreps <- 500
+nreps <- 10
 
 # sites and number of time-steps are fixed
-sites <- 1000
+sites <- 100
 ts <- 500
 death_prop <- 0.10
 
