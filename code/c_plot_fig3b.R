@@ -10,11 +10,11 @@ library(ggplot2)
 library(readr)
 
 # load the relevant functions
-source(here("code/helper-plotting-theme.R"))
+source(here("code/helper_plotting_theme.R"))
 
 # check that we have a figures folder
-if(! dir.exists(here("figures-tables"))){
-  dir.create(here("figures-tables"))
+if(! dir.exists(here("figures_tables"))){
+  dir.create(here("figures_tables"))
 }
 
 # read the simulation data
@@ -62,6 +62,6 @@ p2 <-
         legend.box.margin=margin(0,0,-5,0),
         legend.spacing.x = unit(0.6, "cm"))
 plot(p2)
-save("p2", file = here("figures-tables", "fig3b.RData"))
+save("p2", file = here("figures_tables", "fig3b.RData"))
 
 ### END

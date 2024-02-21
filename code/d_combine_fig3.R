@@ -7,8 +7,8 @@ library(ggplot2)
 library(ggpubr)
 
 # load the plot data
-load(here("figures-tables", "fig3a.RData"))
-load(here("figures-tables", "fig3b.RData"))
+load(here("figures_tables", "fig3a.RData"))
+load(here("figures_tables", "fig3b.RData"))
 
 # combine these figures using ggarrange
 p12 <- 
@@ -19,7 +19,7 @@ p12 <-
 p12
 
 # export this figure
-ggsave( filename = here("figures-tables/Fig_2.png"), 
+ggsave( filename = here("figures_tables/fig3.png"), 
        plot = p12, width = 20, height = 10.5, dpi = 300,
        units = "cm")
 

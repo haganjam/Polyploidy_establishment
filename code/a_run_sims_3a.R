@@ -11,11 +11,11 @@ library(ggplot2)
 
 # load the relevant functions
 source(here("code/model.R"))
-source(here("code/helper-plotting-theme.R"))
+source(here("code/helper_plotting_theme.R"))
 
 # check that we have a figures folder
-if(! dir.exists(here("figures-tables"))){
-  dir.create(here("figures-tables"))
+if(! dir.exists(here("figures_tables"))){
+  dir.create(here("figures_tables"))
 }
 
 # set the number of simulation replicates
@@ -120,6 +120,6 @@ p1 <-
 plot(p1)
 
 # export the figure
-save("p1", file = here("figures-tables", "fig3a.RData"))
+save("p1", file = here("figures_tables", "fig3a.RData"))
 
 ### END
