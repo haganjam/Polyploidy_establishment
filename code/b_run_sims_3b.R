@@ -30,9 +30,9 @@ death_prop <- 0.10
 
 # frequency of the majority cytotype
 P_D <- c(0.95)
-X_pol <- seq(0.05, 0.95, 0.1)
+X_pol <- seq(0.05, 0.95, 0.05)
 pol_eff <- 0.8
-self <- seq(0.05, 0.95, 0.1)
+self <- seq(0.05, 0.95, 0.05)
 seedP <- NA
 seedD <- c(8)
 

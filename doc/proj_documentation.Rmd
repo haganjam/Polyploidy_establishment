@@ -7,9 +7,6 @@ output: rmarkdown::github_document
 
 The goal of this project is to understand factors that influence the establishment of polyploids. In particular, how polyploids are able to avoid minority cytotype exclusion from the perspective of reproductive ecology.
 
-To do this, we will use several different sources of evidence including conceptual models, agent-based simulation models and empirical trait-ploidy correlations.
-
-
 ## Agent-based polyploid establishment model
 
 To test how rate of outcrossing, polyploid fitness and selfing interact to affect the probability of minority cytotype exclusion, we developed a spatially implicit, agent-based model of interacting cytotypes. 
@@ -22,7 +19,7 @@ Next, we randomly select X individuals that are pollinated. The number of indivi
 
 For each individual that is chosen to be pollinated, we randomly draw an individual from the remaining community to pollinate it. Thus, if there are more **D cytotypes** in the community then, on average, more individuals will be pollinated by **D cytotypes**.
 
-If the pollinated individuals are pollinated by the same cytotype, then the number of same cytotype seeds is controlled by the fitness parameters (*seedD or seedP*) and the pollinator effectiveness parameter (*pol_eff*). For example, if a D individual is pollinated by another D individual, the seed set is calculated as (*seedD x pol_eff*) where seedD is a positive integer specifying the potential seed set and pol_eff is a proportion of that potential seed set.
+If the pollinated individuals are pollinated by the same cytotype, then the number of same cytotype seeds is controlled by the fitness parameters (*seedD or seedP*) and the pollinator effectiveness parameter (*pol_eff*). For example, if a D individual is pollinated by another D individual, the seed set is calculated as (*seedD x pol_eff*) where seedD is a positive integer specifying the potential seed set and *pol_eff* is a proportion of that potential seed set.
 
 There are two options for setting the fitness parameters (*seedD or seedP*). First, you can provide two different integers for *seedD* and *seedP*. Or, you can provide an integer for seedD and then set *fit_ran = TRUE*. By doing this, the function will draw a number from a normal distribution with mean = *fit_ran.m* and sd = *fit_ran.sd*. Then seedP is calculated as: *seedD + rnorm(n = 1, mean = fit_ran.m, sd = fit_ran.sd)*. Therefore, we simulate the case where polyploids get some random fitness change after polyploidisation.
 
