@@ -95,7 +95,7 @@ p1 <-
   geom_line(data = modlist %>% 
               mutate(X_pol = as.character(X_pol)), 
             mapping = aes(x = time, y = prop_P, group = modid, colour = X_pol), 
-            size = 0.1, alpha = 0.2) +
+            size = 0.1, alpha = 0.4) +
   geom_line(data = modlist.sum %>%
               mutate(X_pol = as.character(X_pol)),
             mapping = aes(x = time, y = prop_P.m, colour = X_pol),
@@ -108,7 +108,7 @@ p1 <-
   guides(colour = guide_legend(title = "Outcross probability",
                                override.aes = list(size = 1.5,
                                                    alpha = 1))) +
-  scale_colour_viridis_d(end = 0.85, option = "C", direction = -1) +
+  scale_colour_viridis_d(end = 0.95, option = "E", direction = 1) +
   theme_meta() +
   theme(axis.text = element_text(colour = "black"),
         legend.position = "top",

@@ -20,7 +20,7 @@ p12
 
 # export this figure
 ggsave( filename = here("figures_tables/fig3.png"), 
-       plot = p12, width = 20, height = 10.5, dpi = 300,
+       plot = p12, width = 20, height = 10.5, dpi = 400,
        units = "cm")
 
 ### END
