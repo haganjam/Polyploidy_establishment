@@ -23,4 +23,8 @@ ggsave( filename = here("figures_tables/fig3.png"),
        plot = p12, width = 20, height = 10.5, dpi = 400,
        units = "cm")
 
+ggsave( filename = here("figures_tables/fig3.tiff"), 
+        plot = p12, width = 20, height = 10.5, dpi = 800,
+        units = "cm")
+
 ### END
