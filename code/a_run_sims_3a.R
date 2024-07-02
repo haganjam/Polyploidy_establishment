@@ -100,7 +100,6 @@ p1 <-
               mutate(X_pol = as.character(X_pol)),
             mapping = aes(x = time, y = prop_P.m, colour = X_pol),
             size = 1, alpha = 1) +
-  geom_hline(yintercept = 0.1, colour = "black", linetype = "dashed") +
   scale_y_continuous(limits = c(0, 1)) +
   ylab("Minority cytotype freq.") +
   xlab("Generations") +

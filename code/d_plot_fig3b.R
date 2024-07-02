@@ -63,7 +63,7 @@ p2 <-
   geom_tile(linewidth = 1) +
   scale_fill_viridis_c(begin = 0,end = 0.9, option= "E", direction = -1) +
   scale_colour_viridis_c(begin = 0,end = 0.9, option= "E", direction = -1) +
-  ylab("Selfing ability") +
+  ylab("Autonomous selfing ability") +
   xlab("Outcross probability") +
   guides(fill = guide_colourbar(title.position = "left", 
                                 title.vjust = 0.9,
